@@ -1,6 +1,5 @@
 import eCommerceData from './eCommerceData.js';
 import toggleModal from './modal.js';
-console.log(eCommerceData);
 
 const cartItems = {
     totalPrice: 0,
@@ -43,21 +42,35 @@ const checkoutHandler = () => {
     productsInCart.innerHTML = '';
     totalPrice.textContent = `Total price: ${cartItems.totalPrice}`;
     toggleModal('Transaction passed successfully');
+    itemCount.textContent = 0;
 }
 
 
 checkoutBtn.addEventListener('click', checkoutHandler);
 
-const addProductToCart = ({ productImage, productPrice, productTitle }) => {
+const deleteProductHandler = (product) => {
+    cartItems.products.splice(product, 1);
+    cartItems.totalPrice > 0 ? cartItems.totalPrice -= product.productPrice : null;
+
+    totalPrice.textContent = `Total price: ${cartItems.totalPrice}`;
+}
+
+
+
+
+const addProductToCart = (product) => {
     const newProduct = document.createElement('div');
     newProduct.classList.add('cart-item');
     newProduct.innerHTML = `
-        <img src=${productImage} alt="item"/>
+        <img src=${product.productImage} alt="item"/>
         <div class="item-details">
-            <span class="name">${productTitle}</span>
-            <span class="price">${productPrice}</span>
+            <span class="name">${product.productTitle}</span>
+            <span class="price">${product.productPrice}</span>
+            <span class="delete">Remove</span>
         </div>
     `;
+
+    newProduct.querySelector('.delete').addEventListener('click', () => deleteProductHandler(product));
 
     productsInCart.appendChild(newProduct);
 };
@@ -71,7 +84,6 @@ const addToCartHandler = (productToAdd) => {
         addProductToCart(productToAdd);
         totalPrice.textContent = `Total price: ${cartItems.totalPrice}`;
     } else {
-        
         cartItems.totalPrice += productToAdd.productPrice;
         itemCount.textContent = cartItems.products.length++;
         totalPrice.textContent = `Total price: ${cartItems.totalPrice}`;

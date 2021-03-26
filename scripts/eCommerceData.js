@@ -19,7 +19,7 @@ const eCommerceData = {
     {
         productImage: 'https://i.ibb.co/XzcwL5s/black-shearling.png',
         productTitle: 'Black Jean Shearling',
-        productPrice: 10000
+        productPrice: 7000
     },
     {
         productImage: 'https://i.ibb.co/mJS6vz0/blue-jean-jacket.png',
@@ -65,6 +65,21 @@ const eCommerceData = {
         productImage: 'https://i.ibb.co/VpW4x5t/roll-up-jean-shirt.png',
         productTitle: 'Jean Long Sleeve',
         productPrice: 7900
+    },
+    {
+        productImage: 'https://i.ibb.co/rKBDvJX/palm-tree-cap.png',
+        productTitle: 'Palm Tree Cap',
+        productPrice: 900
+    },
+    {
+        productImage: 'https://i.ibb.co/YTjW3vF/green-beanie.png',
+        productTitle: 'JGreen Beanie',
+        productPrice: 800
+    },
+    {
+        productImage: 'https://i.ibb.co/ypkgK0X/blue-beanie.png',
+        productTitle: 'Blue Beanie',
+        productPrice: 850
     }
     ] 
 }
