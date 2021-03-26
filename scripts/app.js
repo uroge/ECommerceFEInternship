@@ -1,33 +1,61 @@
 import eCommerceData from './eCommerceData.js';
+import toggleModal from './modal.js';
 console.log(eCommerceData);
-
-const productsContainer = document.querySelector('.preview');
-const wallet = document.getElementById('wallet');
-const cart = document.querySelector('.cart-icon');
-const cartDropdown = document.querySelector('.cart-dropdown');
-
-const itemCount = document.querySelector('.item-count');
-const productsInCart = document.querySelector('.cart-items');
 
 const cartItems = {
     totalPrice: 0,
     products: []
 };
 
+const productsContainer = document.querySelector('.preview');
+const wallet = document.getElementById('wallet');
+const cart = document.querySelector('.cart-icon');
+
+const itemCount = document.querySelector('.item-count');
+const productsInCart = document.querySelector('.cart-items');
+const totalPrice = document.querySelector('.total-price');
+
+const cartDropdown = document.querySelector('.cart-dropdown');
+const checkoutBtn = document.querySelector('.dropdown-btn');
+wallet.textContent = eCommerceData.wallet;
+
 cart.addEventListener('click', () => {
     cartDropdown.classList.toggle('closed');
 });
 
-wallet.textContent = eCommerceData.wallet;
+const checkoutHandler = () => {
+    if(cartItems.totalPrice > eCommerceData.wallet) {
+        toggleModal('You don\'t have enough money in your wallet! :)');
+        return;
+    }
 
-const addProductToCart = (productToAdd) => {
+    if(cartItems.products.length === 0 && cartItems.totalPrice === 0) {
+        toggleModal('You should add something to cart first!');
+        return;
+    }
+
+    eCommerceData.wallet -= cartItems.totalPrice;
+
+    wallet.textContent = eCommerceData.wallet;
+    
+    cartItems.products = [];
+    cartItems.totalPrice = 0;
+    productsInCart.innerHTML = '';
+    totalPrice.textContent = `Total price: ${cartItems.totalPrice}`;
+    toggleModal('Transaction passed successfully');
+}
+
+
+checkoutBtn.addEventListener('click', checkoutHandler);
+
+const addProductToCart = ({ productImage, productPrice, productTitle }) => {
     const newProduct = document.createElement('div');
     newProduct.classList.add('cart-item');
     newProduct.innerHTML = `
-        <img src=${productToAdd.productImage} alt="item"/>
+        <img src=${productImage} alt="item"/>
         <div class="item-details">
-            <span class="name">${productToAdd.productTitle}</span>
-            <span class="price">${productToAdd.productPrice}</span>
+            <span class="name">${productTitle}</span>
+            <span class="price">${productPrice}</span>
         </div>
     `;
 
@@ -35,17 +63,19 @@ const addProductToCart = (productToAdd) => {
 };
 
 const addToCartHandler = (productToAdd) => {
-    
     if(!cartItems.products.includes(productToAdd)) {
         cartItems.products.push(productToAdd);
         cartItems.totalPrice += productToAdd.productPrice;
         itemCount.textContent = cartItems.products.length;
-        addProductToCart(productToAdd);
-        console.log(cartItems);
-    } else {
 
+        addProductToCart(productToAdd);
+        totalPrice.textContent = `Total price: ${cartItems.totalPrice}`;
+    } else {
+        
+        cartItems.totalPrice += productToAdd.productPrice;
+        itemCount.textContent = cartItems.products.length++;
+        totalPrice.textContent = `Total price: ${cartItems.totalPrice}`;
     }
-    
 };
 
 const renderProducts = (product) => {
